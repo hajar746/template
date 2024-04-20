@@ -34,6 +34,27 @@ module.exports = {
         test: /\.html$/i,
         loader: "html-loader",
       },
+      {
+        test: /\.(?:js|mjs|cjs)$/,
+        exclude: {
+          and: [
+            /node_modules[\\/]core-js/,
+            /node_modules[\\/]webpack[\\/]buildin/,
+          ],
+          not: [
+            // Except for a few of them that needs to be transpiled because they use modern syntax
+            /unfetch/,
+            /d3-array|d3-scale/,
+            /@hapi[\\/]joi-date/,
+          ],
+        },
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [["@babel/preset-env", { targets: "defaults" }]],
+          },
+        },
+      },
     ],
   },
   plugins: [
